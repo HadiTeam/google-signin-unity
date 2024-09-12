@@ -192,10 +192,12 @@ namespace Google.Impl {
 
 	internal static string GoogleSignIn_GetUserId(HandleRef self)
 	{
-		string idTokenPart = null;
+		string idTokenFull = null;
 		try
 		{
-			idTokenPart = googleIdTokenCredential?.Call<string>("getIdToken")?.Split('.')?.ElementAtOrDefault(1);
+			idTokenFull = googleIdTokenCredential?.Call<string>("getIdToken");
+			Debug.LogFormat("idTokenFull : {0}",idTokenFull);
+			idTokenPart = idTokenFull?.Split('.')?.ElementAtOrDefault(1);
 			Debug.LogFormat("idTokenPart : {0}",idTokenPart);
 			if(!(idTokenPart?.Length is int length && length > 1))
 				return null;
@@ -210,7 +212,7 @@ namespace Google.Impl {
 		}
 		catch(Exception e)
 		{
-			Debug.LogException(new Exception($"GoogleSignIn_GetUserId.idTokenPart {idTokenPart}"));
+			Debug.LogException(new Exception($"GoogleSignIn_GetUserId.idTokenFull {idTokenFull}"));
 			Debug.LogException(e);
 			return null;
 		}
