@@ -197,7 +197,7 @@ namespace Google.Impl {
 		{
 			idTokenFull = googleIdTokenCredential?.Call<string>("getIdToken");
 			Debug.LogFormat("idTokenFull : {0}",idTokenFull);
-			idTokenPart = idTokenFull?.Split('.')?.ElementAtOrDefault(1);
+			var idTokenPart = idTokenFull?.Split('.')?.ElementAtOrDefault(1);
 			Debug.LogFormat("idTokenPart : {0}",idTokenPart);
 			if(!(idTokenPart?.Length is int length && length > 1))
 				return null;
