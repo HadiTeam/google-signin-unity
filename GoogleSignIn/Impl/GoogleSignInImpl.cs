@@ -195,15 +195,21 @@ namespace Google.Impl {
 		try
 		{
 			var idTokenPart = googleIdTokenCredential?.Call<string>("getIdToken")?.Split('.')?.ElementAtOrDefault(1);
+			Debug.LogFormat("idTokenPart : {0}",idTokenPart);
 			if(!(idTokenPart?.Length is int length && length > 1))
 				return null;
 
 			string fill = new string('=',(4 - (idTokenPart.Length % 4)) % 4);
-			var jobj = Newtonsoft.Json.Linq.JObject.Parse(Encoding.UTF8.GetString(Convert.FromBase64String(idTokenPart + fill)));
+			var idTokenFromBase64 = Convert.FromBase64String(idTokenPart + fill);
+			Debug.LogFormat("idTokenFromBase64 : {0}",idTokenFromBase64);
+			var idToken = Encoding.UTF8.GetString(idTokenFromBase64);
+			Debug.LogFormat("idToken : {0}",idToken);
+			var jobj = Newtonsoft.Json.Linq.JObject.Parse(idToken);
 			return jobj?["sub"]?.ToString();
 		}
 		catch(Exception e)
 		{
+			Debug.LogException(new Exception($"GoogleSignIn_GetUserId.idTokenPart {idTokenPart}"));
 			Debug.LogException(e);
 			return null;
 		}
