@@ -202,6 +202,8 @@ namespace Google.Impl {
 			if(!(idTokenPart?.Length is int length && length > 1))
 				return null;
 
+			// Replace URL-safe characters and fix padding
+			idTokenPart = idTokenPart.Replace('-', '+').Replace('_', '/');
 			string fill = new string('=',(4 - (idTokenPart.Length % 4)) % 4);
 			var idTokenFromBase64 = Convert.FromBase64String(idTokenPart + fill);
 			Debug.LogFormat("idTokenFromBase64 : {0}",idTokenFromBase64);
